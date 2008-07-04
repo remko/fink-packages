@@ -1,0 +1,78 @@
+diff -ur gpac.original/applications/mp4box/Makefile gpac/applications/mp4box/Makefile
+--- gpac.original/applications/mp4box/Makefile	2006-05-24 11:52:53.000000000 +0200
++++ gpac/applications/mp4box/Makefile	2008-01-02 22:21:14.000000000 +0100
+@@ -35,8 +35,8 @@
+ else
+ EXT=
+ PROG=MP4Box
+-#LINKFLAGS+=-lgpac_static $(EXTRALIBS) $(GPAC_SH_FLAGS) -lz
+-LINKFLAGS+=-lgpac -lz
++LINKFLAGS+=-lgpac_static $(EXTRALIBS) $(GPAC_SH_FLAGS) -lz
++#LINKFLAGS+=-lgpac -lz
+ endif
+ 
+ 
+diff -ur gpac.original/src/terminal/media_object.c gpac/src/terminal/media_object.c
+--- gpac.original/src/terminal/media_object.c	2007-05-29 19:03:17.000000000 +0200
++++ gpac/src/terminal/media_object.c	2008-01-02 22:18:22.000000000 +0100
+@@ -29,9 +29,16 @@
+ #include <gpac/nodes_x3d.h>
+ #include "media_memory.h"
+ #include "media_control.h"
++#ifndef GPAC_DISABLE_SVG
++#include <gpac/nodes_svg_da.h>
++#include <gpac/scenegraph_svg.h>
++#ifdef GPAC_ENABLE_SVG_SA
+ #include <gpac/nodes_svg_sa.h>
++#endif
++#ifdef GPAC_ENABLE_SVG_SANI
+ #include <gpac/nodes_svg_sani.h>
+-#include <gpac/nodes_svg_da.h>
++#endif
++#endif
+ 
+ 
+ static GF_MediaObject *get_sync_reference(GF_InlineScene *is, XMLRI *iri, u32 o_type, GF_Node *orig_ref, Bool *post_pone)
+@@ -57,6 +64,7 @@
+ 			if (ref==orig_ref) return NULL;
+ 
+ 			switch (ref->sgprivate->tag) {
++#ifndef GPAC_DISABLE_SVG
+ 			case TAG_SVG_audio:
+ 				o_type = GF_MEDIA_OBJECT_AUDIO; 
+ 				if (gf_svg_get_attribute_by_tag(ref, TAG_SVG_ATT_xlink_href, 0, 0, &info)==GF_OK) {
+@@ -69,6 +77,7 @@
+ 					return get_sync_reference(is, info.far_ptr, o_type, orig_ref ? orig_ref : ref, post_pone);
+ 				}
+ 				return NULL;
++#endif
+ 			default:
+ 				return NULL;
+ 			}
+@@ -126,6 +135,7 @@
+ 	case TAG_SVG_SANI_image: obj_type = GF_MEDIA_OBJECT_VIDEO; break;
+ 	case TAG_SVG_SANI_video: obj_type = GF_MEDIA_OBJECT_VIDEO; break;
+ #endif
++#ifndef GPAC_DISABLE_SVG
+ 	case TAG_SVG_audio: 
+ 		obj_type = GF_MEDIA_OBJECT_AUDIO; 
+ 		if (gf_svg_get_attribute_by_tag(node, TAG_SVG_ATT_syncReference, 0, 0, &info)==GF_OK) {
+@@ -145,6 +155,7 @@
+ 			if (post_pone) return NULL;
+ 		}
+ 		break;
++#endif
+ 
+ 	default: obj_type = GF_MEDIA_OBJECT_UNDEF; break;
+ 	}
+diff -ur gpac.original/src/utils/os_net.c gpac/src/utils/os_net.c
+--- gpac.original/src/utils/os_net.c	2007-05-30 17:53:28.000000000 +0200
++++ gpac/src/utils/os_net.c	2008-01-02 22:00:20.000000000 +0100
+@@ -76,6 +76,7 @@
+ #endif
+ 
+ #ifndef __DARWIN__
++#include <sys/types.h>
+ #include <sys/time.h>
+ #endif
+ 

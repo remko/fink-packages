@@ -1,0 +1,27 @@
+Package: mp4box
+Version: 0.4.4
+Revision: 0.1
+HomePage: http://gpac.sourceforge.net
+License: LGPL
+Description: Tool for manipulating multimedia files
+Maintainer: Remko Troncon <dev@el-tramo.be>
+
+Source: mirror:sourceforge:gpac/gpac-%v.tar.gz
+Source-MD5: a5cb48ab85e9914d127fd8799b4b2e56
+SourceDirectory: gpac
+SourceRename: %n-%v.tar.gz
+Patch: %n.patch
+
+ConfigureParams: --disable-ssl --disable-opengl --disable-x11-shm --disable-oss-audio --disable-wx --disable-ipv6 --disable-svg --use=js=no --use-ft=no --use-jpeg=no --use-png=no --use-fad=no --use-mad=no --use-xvid=no --use-ffmpeg=no 
+CompileScript: <<
+	chmod a+x configure
+	./configure %c
+	make -C src
+	make -C applications/mp4box
+<<
+
+InstallScript: <<
+	install -d %i/bin
+	install %b/bin/gcc/MP4Box %i/bin/mp4box
+<<
+DocFiles: AUTHORS COPYING Changelog README
