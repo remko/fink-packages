@@ -4,7 +4,7 @@ Revision: 0.1
 HomePage: http://gpac.sourceforge.net
 License: LGPL
 Description: Tool for manipulating multimedia files
-Maintainer: Remko Troncon <dev@el-tramo.be>
+Maintainer: Remko Tronçon <dev@el-tramo.be>
 
 Source: mirror:sourceforge:gpac/gpac-%v.tar.gz
 Source-MD5: a5cb48ab85e9914d127fd8799b4b2e56

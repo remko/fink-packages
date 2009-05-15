@@ -3,7 +3,7 @@ Version: 4.10.2
 Revision: 1
 Source: ftp://space.mit.edu/pub/davis/%n/%n-%v.tar.bz2
 Source-MD5: 99a24b6989ac81f436791b957b2e171a
-Maintainer: Remko Troncon <dev@el-tramo.be>
+Maintainer: Remko Tronçon <dev@el-tramo.be>
 HomePage: http://www.jedsoft.org/most
 License: GPL
 Description: Powerful paging program
